@@ -5,14 +5,74 @@
     <meta charset="utf-8">
     <script src="js/main.js"></script>
     <link rel="stylesheet" href="css/main.css">
-    
-    <!-- get rid of favicon error -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">    <!-- get rid of favicon error -->
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   </head>
   <body>
+    <h1>Track your <br> <span class="playfair-display-italic">calories</span></h1>
     <form>
-      <input type="text" id="yourname" value="your name here">
-      <button>submit</button>
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date" defaultValue="2024-01-01">
+      <label for="meal">Choose a meal:</label>
+      <select name="meal" id="meal">
+        <option value="breakfast">Breakfast</option>
+        <option value="lunch">Lunch</option>
+        <option value="dinner">Dinner</option>
+        <option value="snack">Snack</option>
+      </select>
+      <label for="foodName">Name of food:</label>
+      <input type="text" id="foodName" name="foodName" placeholder="e.g. eggs">
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" placeholder="e.g. 12">
+      <label for="unit">Unit:</label>
+      <select name="unit" id="unit">
+        <option value="item(s)">item(s)</option>
+        <option value="lb(s)">lb(s)</option>
+        <option value="oz(s)">oz(s)</option>
+        <option value="g">g</option>
+        <option value="kg">kg</option>
+        <option value="cup(s)">cup(s)</option>
+        <option value="tbsp(s)">tbsp(s)</option>
+        <option value="tsp(s)">tsp(s)</option>
+      </select>
+      <label for="calories">Calories:</label>
+      <input type="number" id="calories" name="calories" placeholder="e.g. 200">
+      <button>Submit</button>
     </form>
+    <table>
+      <thead>
+        <tr>
+          <th>Meal</th>
+          <th>Food Name</th>
+          <th>Quantity</th>
+          <th>Unit</th>
+          <th>Calories</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Breakfast</td>
+          <td>Eggs</td>
+          <td>2</td>
+          <td>item(s)</td>
+          <td>200</td>
+        </tr>
+        <tr>
+          <td>Lunch</td>
+          <td>Chicken Salad</td>
+          <td>1</td>
+          <td>lb(s)</td>
+          <td>350</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>Sum</td>
+          <td>550</td>
+        </tr>
+      </tfoot>
+    </table>
   </body>
 </html>
