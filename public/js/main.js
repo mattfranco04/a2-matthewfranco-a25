@@ -6,10 +6,10 @@ const submit = async function( event ) {
   // this was the original browser behavior and still
   // remains to this day
   event.preventDefault()
-  
-  const input = document.querySelector( "#yourname" ),
-        json = { yourname: input.value },
-        body = JSON.stringify( json )
+
+  const form = document.querySelector( "form" )
+  let formData = new FormData(form)
+  let body = JSON.stringify(Object.fromEntries(formData.entries()))
 
   const response = await fetch( "/submit", {
     method:"POST",
@@ -17,11 +17,19 @@ const submit = async function( event ) {
   })
 
   const text = await response.text()
+  form.reset()
 
   console.log( "text:", text )
 }
 
 window.onload = function() {
-   const button = document.querySelector("button");
+  const button = document.querySelector("button");
   button.onclick = submit;
+
+  const form = document.querySelector("form");
+  const clearButton = document.getElementById("clearButton");
+  clearButton.onclick = function() {
+    form.reset();
+  }
 }
+

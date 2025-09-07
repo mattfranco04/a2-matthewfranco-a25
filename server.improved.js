@@ -8,40 +8,7 @@ const http = require( "http" ),
       dir  = "public/",
       port = 3000
 
-const meals = [
-  {
-    date: "2024-09-06",
-    meal: "breakfast",
-    foodName: "Oatmeal",
-    quantity: 1,
-    unit: "cup(s)",
-    calories: 150
-  },
-  {
-    date: "2024-09-06",
-    meal: "lunch",
-    foodName: "Chicken Salad",
-    quantity: 1,
-    unit: "lb(s)",
-    calories: 350
-  },
-  {
-    date: "2024-09-06",
-    meal: "dinner",
-    foodName: "Steak",
-    quantity: 8,
-    unit: "oz(s)",
-    calories: 600
-  },
-  {
-    date: "2024-09-06",
-    meal: "snack",
-    foodName: "Apple",
-    quantity: 1,
-    unit: "item(s)",
-    calories: 95
-  }
-]
+const meals = [];
 
 const server = http.createServer( function( request,response ) {
   if( request.method === "GET" ) {
@@ -54,10 +21,16 @@ const server = http.createServer( function( request,response ) {
 const handleGet = function( request, response ) {
   const filename = dir + request.url.slice( 1 ) 
 
-  if( request.url === "/" ) {
-    sendFile( response, "public/index.html" )
-  }else{
-    sendFile( response, filename )
+  switch (request.url) {
+    case "/":
+      sendFile( response, "public/index.html" )
+      break;
+    case "/meals":
+      response.writeHead(200, "OK", {"Content-Type": "text/plain" });
+      response.end(meals.map(meal => `${meal.date} - ${meal.meal}: ${meal.foodName}, ${meal.quantity} ${meal.unit}, ${meal.calories} calories`).join("\n"));
+      break;
+    default:
+      sendFile( response, filename )
   }
 }
 
@@ -71,8 +44,17 @@ const handlePost = function( request, response ) {
   request.on( "end", function() {
     console.log( JSON.parse( dataString ) )
 
-    response.writeHead( 200, "OK", {"Content-Type": "text/plain" })
-    response.end("test")
+    switch (request.url) {
+      case "/submit":
+        const receivedData = JSON.parse(dataString);
+        console.log("Received data:", receivedData);
+        meals.push(receivedData);
+        break;
+      default:
+        response.writeHead(404, "Not Found", {"Content-Type": "text/plain" });
+        response.end("404 Not Found")
+    }
+   
   })
 }
 

@@ -9,6 +9,7 @@
 
 body {
     font-family: "Overpass", sans-serif;
+    background-color: #2D2A32;
 }
 
 form {
@@ -52,4 +53,15 @@ table, th, td {
   border-collapse: collapse;
   padding: 8px;
   text-align: left;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    font-size: 48px;
+}
+
+#clearButton {
+    background-color: #ccc;
+    color: black;
 }

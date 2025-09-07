@@ -11,7 +11,7 @@
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   </head>
   <body>
-    <h1>Track your <br> <span class="playfair-display-italic">calories</span></h1>
+    <h1>Track <span class="playfair-display-italic">your</span> calories</h1>
     <form>
       <label for="date">Date:</label>
       <input type="date" id="date" name="date" defaultValue="2024-01-01">
@@ -40,39 +40,7 @@
       <label for="calories">Calories:</label>
       <input type="number" id="calories" name="calories" placeholder="e.g. 200">
       <button>Submit</button>
+      <button type="button" id="clearButton">Clear</button>
     </form>
-    <table>
-      <thead>
-        <tr>
-          <th>Meal</th>
-          <th>Food Name</th>
-          <th>Quantity</th>
-          <th>Unit</th>
-          <th>Calories</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Breakfast</td>
-          <td>Eggs</td>
-          <td>2</td>
-          <td>item(s)</td>
-          <td>200</td>
-        </tr>
-        <tr>
-          <td>Lunch</td>
-          <td>Chicken Salad</td>
-          <td>1</td>
-          <td>lb(s)</td>
-          <td>350</td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td>Sum</td>
-          <td>550</td>
-        </tr>
-      </tfoot>
-    </table>
   </body>
 </html>
