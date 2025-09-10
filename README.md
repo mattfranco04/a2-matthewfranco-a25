@@ -21,6 +21,7 @@ The layout uses CSS Flexbox to arrange the form and the table side by side for a
 - **RESTful endpoints:** The server supports adding, editing, and deleting meals with clear endpoints (`/submit`, `/update`, `/delete`).
   - _Challenge:_ Designing endpoints to be stateless and robust, and ensuring the client always receives the correct, updated data after each operation.
 - **Form validation:** The client prevents submission of incomplete forms.
+- **Date field:** The date field for each meal is added by the server.
 
 ### Design/Evaluation Achievements
 
