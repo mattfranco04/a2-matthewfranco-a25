@@ -8,7 +8,120 @@ const http = require( "http" ),
       dir  = "public/",
       port = 3000
 
-const meals = [];
+let meals = [
+  // 2025-09-08
+  {
+    id: "dummy5",
+    date: "2025-09-08",
+    meal: "breakfast",
+    foodName: "Bagel",
+    quantity: 1,
+    unit: "item(s)",
+    calories: 250
+  },
+  {
+    id: "dummy6",
+    date: "2025-09-08",
+    meal: "lunch",
+    foodName: "Turkey Sandwich",
+    quantity: 1,
+    unit: "item(s)",
+    calories: 400
+  },
+  {
+    id: "dummy7",
+    date: "2025-09-08",
+    meal: "dinner",
+    foodName: "Salmon",
+    quantity: 6,
+    unit: "oz(s)",
+    calories: 350
+  },
+  // 2025-09-09
+  {
+    id: "dummy3",
+    date: "2025-09-09",
+    meal: "dinner",
+    foodName: "Steak",
+    quantity: 8,
+    unit: "oz(s)",
+    calories: 600
+  },
+  {
+    id: "dummy4",
+    date: "2025-09-09",
+    meal: "snack",
+    foodName: "Apple",
+    quantity: 1,
+    unit: "item(s)",
+    calories: 95
+  },
+  {
+    id: "dummy8",
+    date: "2025-09-09",
+    meal: "breakfast",
+    foodName: "Eggs",
+    quantity: 2,
+    unit: "item(s)",
+    calories: 180
+  },
+  // 2025-09-10
+  {
+    id: "dummy1",
+    date: "2025-09-10",
+    meal: "breakfast",
+    foodName: "Oatmeal",
+    quantity: 1,
+    unit: "cup(s)",
+    calories: 150
+  },
+  {
+    id: "dummy2",
+    date: "2025-09-10",
+    meal: "lunch",
+    foodName: "Chicken Salad",
+    quantity: 1,
+    unit: "lb(s)",
+    calories: 350
+  },
+  {
+    id: "dummy9",
+    date: "2025-09-10",
+    meal: "dinner",
+    foodName: "Pasta",
+    quantity: 2,
+    unit: "cup(s)",
+    calories: 400
+  },
+  // 2025-09-11
+  {
+    id: "dummy10",
+    date: "2025-09-11",
+    meal: "breakfast",
+    foodName: "Pancakes",
+    quantity: 3,
+    unit: "item(s)",
+    calories: 350
+  },
+  {
+    id: "dummy11",
+    date: "2025-09-11",
+    meal: "lunch",
+    foodName: "Caesar Salad",
+    quantity: 1,
+    unit: "bowl(s)",
+    calories: 320
+  },
+  {
+    id: "dummy12",
+    date: "2025-09-11",
+    meal: "dinner",
+    foodName: "Pizza",
+    quantity: 2,
+    unit: "slice(s)",
+    calories: 500
+  }
+];
 
 const server = http.createServer( function( request,response ) {
   if( request.method === "GET" ) {
@@ -25,10 +138,18 @@ const handleGet = function( request, response ) {
     case "/":
       sendFile( response, "public/index.html" )
       break;
-    case "/meals":
-      response.writeHead(200, "OK", {"Content-Type": "text/plain" });
-      response.end(meals.map(meal => `${meal.date} - ${meal.meal}: ${meal.foodName}, ${meal.quantity} ${meal.unit}, ${meal.calories} calories`).join("\n"));
+    case "/meals": {
+      // Group meals by date and add total calories per day
+      const grouped = {};
+      meals.forEach(meal => {
+        if (!grouped[meal.date]) grouped[meal.date] = { meals: [], totalCalories: 0 };
+        grouped[meal.date].meals.push(meal);
+        grouped[meal.date].totalCalories += Number(meal.calories) || 0;
+      });
+      response.writeHead(200, "OK", {"Content-Type": "application/json" });
+      response.end(JSON.stringify(grouped));
       break;
+    }
     default:
       sendFile( response, filename )
   }
@@ -42,19 +163,42 @@ const handlePost = function( request, response ) {
   })
 
   request.on( "end", function() {
-    console.log( JSON.parse( dataString ) )
-
+    let result = {};
     switch (request.url) {
-      case "/submit":
+      case "/submit": {
         const receivedData = JSON.parse(dataString);
-        console.log("Received data:", receivedData);
-        meals.push(receivedData);
+        // Add a unique id for editing/deleting
+        receivedData.id = Date.now() + Math.random().toString(36).slice(2);
+        meals.push({ ...receivedData, date: new Date().toISOString().split('T')[0] });
+        result = { status: "added", meals };
         break;
+      }
+      case "/delete": {
+        const { id } = JSON.parse(dataString);
+        meals = meals.filter(meal => meal.id !== id);
+        result = { status: "deleted", meals };
+        break;
+      }
+      case "/update": {
+        const updated = JSON.parse(dataString);
+        meals = meals.map(meal => meal.id === updated.id ? { ...meal, ...updated } : meal);
+        result = { status: "updated", meals };
+        break;
+      }
       default:
         response.writeHead(404, "Not Found", {"Content-Type": "text/plain" });
-        response.end("404 Not Found")
+        response.end("404 Not Found");
+        return;
     }
-   
+    // Respond with updated grouped data
+    const grouped = {};
+    meals.forEach(meal => {
+      if (!grouped[meal.date]) grouped[meal.date] = { meals: [], totalCalories: 0 };
+      grouped[meal.date].meals.push(meal);
+      grouped[meal.date].totalCalories += Number(meal.calories) || 0;
+    });
+    response.writeHead(200, "OK", {"Content-Type": "application/json" });
+    response.end(JSON.stringify(grouped));
   })
 }
 

@@ -1,10 +1,29 @@
+.side-by-side-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    margin: 40px auto;
+    max-width: 1200px;
+}
 
+.form-container {
+    flex: 1 1 350px;
+    min-width: 320px;
+    max-width: 400px;
+}
+
+.table-container {
+    flex: 2 1 600px;
+    min-width: 350px;
+    max-width: 700px;
+}
 
 .playfair-display-italic {
-  font-family: "Playfair Display", serif;
-  font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: italic;
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: italic;
 }
 
 body {
@@ -49,13 +68,14 @@ label {
 }
 
 table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-  padding: 8px;
-  text-align: left;
+    color: white;
+    border: 1px solid white;
+    border-collapse: collapse;
+    padding: 8px;
+    text-align: left;
 }
 
-h1 {
+h1, h2 {
     text-align: center;
     color: white;
     font-size: 48px;
