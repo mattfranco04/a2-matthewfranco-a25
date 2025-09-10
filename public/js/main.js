@@ -26,6 +26,7 @@ const renderMealsTable = (date) => {
     `;
     mealList.appendChild(row);
   });
+
   // Show total calories for the day
   const tfoot = document.querySelector("#mealsTable tfoot");
   if (tfoot) tfoot.remove();
@@ -72,10 +73,13 @@ const fetchAndRenderMeals = async (selectDate) => {
     updateDateNav();
     return;
   }
+  let today = new Date().toISOString().split('T')[0];
   if (selectDate && dateList.includes(selectDate)) {
     currentDateIndex = dateList.indexOf(selectDate);
+  } else if (dateList.includes(today)) {
+    currentDateIndex = dateList.indexOf(today);
   } else if (currentDateIndex >= dateList.length) {
-    currentDateIndex = dateList.length - 1;
+    currentDateIndex = 0;
   }
   updateDateNav();
   renderMealsTable(dateList[currentDateIndex]);
@@ -86,6 +90,12 @@ const submit = async function(event) {
   const form = document.querySelector("form");
   let formData = new FormData(form);
   let data = Object.fromEntries(formData.entries());
+
+  if (!data.meal || !data.foodName || !data.quantity || !data.unit || !data.calories) {
+    alert("Please fill in all fields before submitting.");
+    return;
+  }
+
   if (editingMealId) {
     data.id = editingMealId;
     await fetch("/update", {
